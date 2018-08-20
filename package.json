@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/jordanmor/content-scraper/issues"
   },
-  "homepage": "https://github.com/jordanmor/content-scraper#readme"
+  "homepage": "https://github.com/jordanmor/content-scraper#readme",
+  "dependencies": {
+    "node-fetch": "^2.2.0"
+  }
 }
