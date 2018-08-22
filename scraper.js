@@ -39,7 +39,7 @@ fetch('http://shirts4mike.com/shirts.php')
   .then(checkStatus)
   .then(scrapeUrls)
   .then(scrapeData)
-  .then(data => console.log(data))
+  .then(convertToCSV)
   .catch(error => console.log(error.message));
 
 /*=============-=============-=============-=============
@@ -99,5 +99,19 @@ function extractData(html) {
       imageURL: `http://shirts4mike.com/${$shirtImg.attr('src')}`,
       URL: '',
       time: new Date().toISOString().slice(11,19)
+  }
+}
+
+function convertToCSV(data) {
+  const fields = ['title', 'price', 'imageURL', 'URL', 'time'];
+  const date = new Date().toISOString().slice(0, 10);
+  
+  try {
+
+    const csv = json2csv(data, { fields });
+    fs.writeFile(`./data/${date}.csv`, csv, err => err);
+
+  } catch (error) {
+    console.log(error.message);
   }
 }
