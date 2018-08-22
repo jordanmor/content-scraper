@@ -12,9 +12,17 @@ const fetch = require('node-fetch');
 /* 
  * Reasons for using jsdom
  * 1. Over 2 million downloads a week on npm & update last published within the last week.
- * 2. Chose over Cheerio because Cheerio has not been updated for a year
+ * 2. Ease of use with jquery makes scraping data from website easier
+ * 3. Chose over Cheerio because Cheerio has not been updated for a year
  */
 const jsdom = require('jsdom');
+
+/* 
+ * Reasons for using json2csv
+ * 1. Over 75,000 downloads a week on npm & update last published within the last month
+ * 2. Good documentation made this module easy to implement in my project
+ */
+const json2csv = require('json2csv').parse;
 
 const { JSDOM } = jsdom;
 
