@@ -40,7 +40,7 @@ fetch('http://shirts4mike.com/shirts.php')
   .then(scrapeUrls)
   .then(scrapeData)
   .then(convertToCSV)
-  .catch(error => console.log(error.message));
+  .catch(logError);
 
 /*=============-=============-=============-=============
                         FUNCTIONS
@@ -79,7 +79,7 @@ async function scrapeData(urls) {
       const data = await fetch(url)
           .then(checkStatus)
           .then(extractData)
-          .catch(error => console.log(error.message));
+          .catch(logError);
       data.URL = url;
       return data;
   });
@@ -114,4 +114,30 @@ function convertToCSV(data) {
   } catch (error) {
     console.log(error.message);
   }
+}
+
+/* When errors occur, logError function displays a human-friendly error and logs
+the error in a scraper-error.log with a timestamp */
+
+function logError(error) {
+  const date = new Date().toString();
+  let errorMessage = '';
+
+  if (error.message.includes('Connection error')) {
+
+    errorMessage = `${date}\n${error.message}\n\n`;
+
+  } else if (error.message.includes('request to')) {
+
+    let errorText = error.message.split(', ').splice(0,1).toString();
+    errorText = errorText.slice(0,1).toUpperCase() + errorText.slice(1);
+    errorMessage = new Error(`${date}\n${errorText}.\n\n`);
+
+  } else {
+
+    errorMessage = new Error(`${date}\nThere has been a problem with your fetch operation: ${error}\n\n`)
+  }
+
+  fs.appendFile('./scraper-error.log', errorMessage, err => err);
+
 }
