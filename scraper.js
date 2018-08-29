@@ -24,6 +24,13 @@ const jsdom = require('jsdom');
  */
 const json2csv = require('json2csv').parse;
 
+/*
+ * Reasons for using moment
+ * 1. Averages 4 million downloads a week on npm & update last published within the last 3 months
+ * 2. Moment makes formatting dates much easier
+ */
+const moment = require('moment');
+
 const { JSDOM } = jsdom;
 
 // Data folder created if one does not exist. If it does exist, the program does nothing.
@@ -99,13 +106,13 @@ function extractData(html) {
       price: $('.shirt-details .price').text(),
       imageURL: `http://shirts4mike.com/${$shirtImg.attr('src')}`,
       URL: '',
-      time: new Date().toISOString().slice(11,19)
+      time: moment().format('HH:mm:ss')
   }
 }
 
 function convertToCSV(data) {
   const fields = ['title', 'price', 'imageURL', 'URL', 'time'];
-  const date = new Date().toISOString().slice(0, 10);
+  const date = moment().format('YYYY-MM-DD');
 
   try {
 
