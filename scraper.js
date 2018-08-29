@@ -11,7 +11,7 @@ const fetch = require('node-fetch');
 
 /* 
  * Reasons for using jsdom
- * 1. Over 2 million downloads a week on npm & update last published within the last week.
+ * 1. Over 2 million downloads a week on npm & update last published within the last month.
  * 2. Ease of use with jquery makes scraping data from website easier
  * 3. Chose over Cheerio because Cheerio has not been updated for a year
  */
@@ -26,14 +26,15 @@ const json2csv = require('json2csv').parse;
 
 const { JSDOM } = jsdom;
 
-/* Data folder created if one does not exist. If it does exist, 
-an unlogged error is thrown, which does not affect the rest of the program. */
-
+// Data folder created if one does not exist. If it does exist, the program does nothing.
 fs.mkdir('data', err => err);
 
 /*=============-=============-=============-=============
                         FETCH DATA
 ===============-=============-=============-===========*/
+
+/* The project uses the http://shirts4mike.com/shirts.php URL 
+as an entry point to look through the links on the page to find 8 shirts */
 
 fetch('http://shirts4mike.com/shirts.php')
   .then(checkStatus)
@@ -105,7 +106,7 @@ function extractData(html) {
 function convertToCSV(data) {
   const fields = ['title', 'price', 'imageURL', 'URL', 'time'];
   const date = new Date().toISOString().slice(0, 10);
-  
+
   try {
 
     const csv = json2csv(data, { fields });
