@@ -158,17 +158,20 @@ function logError(error) {
 
   if (error.message.includes('Connection error')) {
 
+    console.log(error.message);
     errorMessage = `${date}\n${error.message}\n\n`;
 
   } else if (error.message.includes('request to')) {
 
     let errorText = error.message.split(', ').splice(0,1).toString();
     errorText = errorText.slice(0,1).toUpperCase() + errorText.slice(1);
-    errorMessage = new Error(`${date}\n${errorText}.\n\n`);
+    console.log(errorText);
+    errorMessage = `${date}\n${errorText}.\n\n`;
 
   } else {
-
-    errorMessage = new Error(`${date}\nThere has been a problem with your fetch operation: ${error}\n\n`)
+    const errorText = `There has been a problem with your fetch operation: ${error}`;
+    console.log(errorText);
+    errorMessage = `${date}\n${errorText}\n\n`;
   }
 
   fs.appendFile('./scraper-error.log', errorMessage, err => err);
