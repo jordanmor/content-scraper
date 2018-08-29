@@ -31,6 +31,14 @@ const json2csv = require('json2csv').parse;
  */
 const moment = require('moment');
 
+/*
+ * Reasons for using glob
+ * 1. Averages 15 million downloads a week on npm & update last published within the last month
+ * 2. Useful in finding the dated csv file with a globbing pattern, in order to unlink the file
+ * before creating a new one when the program is run.
+ */
+const glob = require('glob');
+
 const { JSDOM } = jsdom;
 
 // Data folder created if one does not exist. If it does exist, the program does nothing.
@@ -115,12 +123,29 @@ function convertToCSV(data) {
   const date = moment().format('YYYY-MM-DD');
 
   try {
-
+    // Convert data into csv format
     const csv = json2csv(data, { fields });
-    fs.writeFile(`./data/${date}.csv`, csv, err => err);
 
-  } catch (error) {
-    console.log(error.message);
+    // Use glob pattern to find if a csv file already exists
+    glob('data/*.csv', (err, files) => {
+
+      if (err) throw err;
+
+      const filePath = files[0]; // path to old csv file
+      // If a csv file already exists, delete it with fs.unlink()
+      if (filePath) {
+        fs.unlink(filePath, err => {
+          if (err) throw err;
+          // Once the old file is deleted, create a new dated csv file in the data dir
+          fs.writeFile(`./data/${date}.csv`, csv, err => err);
+        });
+      } else {
+        // If there is no previous csv file, simply create a new dated csv file in the data dir
+        fs.writeFile(`./data/${date}.csv`, csv, err => err);
+      }
+    });
+  } catch (err) {
+      logError(err);
   }
 }
 
