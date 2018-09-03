@@ -7,3 +7,6 @@ Treehouse Full Stack JavaScript Techdegree - Project 6
 
   - Create a command-line application to read a web page, extract information, and store the data in a text file.
   - Research and use npm packages that will help you scrape a website and create a CSV file.
+
+**Project Completed:** 08/31/2018  
+**Grade:** Exceeds Expectations
